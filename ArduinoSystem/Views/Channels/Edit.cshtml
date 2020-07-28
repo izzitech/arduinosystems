@@ -1,0 +1,75 @@
+﻿@model ArduinoSystem.Data.Channel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Channel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="AccountId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field1_Name" class="control-label"></label>
+                <input asp-for="Field1_Name" class="form-control" />
+                <span asp-validation-for="Field1_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field2_Name" class="control-label"></label>
+                <input asp-for="Field2_Name" class="form-control" />
+                <span asp-validation-for="Field2_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field3_Name" class="control-label"></label>
+                <input asp-for="Field3_Name" class="form-control" />
+                <span asp-validation-for="Field3_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field4_Name" class="control-label"></label>
+                <input asp-for="Field4_Name" class="form-control" />
+                <span asp-validation-for="Field4_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field5_Name" class="control-label"></label>
+                <input asp-for="Field5_Name" class="form-control" />
+                <span asp-validation-for="Field5_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field6_Name" class="control-label"></label>
+                <input asp-for="Field6_Name" class="form-control" />
+                <span asp-validation-for="Field6_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field7_Name" class="control-label"></label>
+                <input asp-for="Field7_Name" class="form-control" />
+                <span asp-validation-for="Field7_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Field8_Name" class="control-label"></label>
+                <input asp-for="Field8_Name" class="form-control" />
+                <span asp-validation-for="Field8_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-accountid="@Model.AccountId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

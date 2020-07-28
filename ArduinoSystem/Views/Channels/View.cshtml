@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+@model ArduinoSystem.Models.GraphicViewModel
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="grafico"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+
+<script type="text/javascript">
+    var nombreCanvas = "grafico";
+    var arrayX = @Html.Raw(Model.xValues);
+    var arrayY = @Html.Raw(Model.yValues);
+
+    var ctx = document.getElementById(nombreCanvas).getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: arrayX,
+    datasets: [{
+        label: '@Model.graphName',
+        data: arrayY,
+    backgroundColor: 'rgba(0, 128, 255, 0.2)',
+        pointBackgroundColor: 'rgba(0, 128, 255, 1)',
+            borderColor: 'rgba(0, 128, 255, 1)',
+                pointRadius: 0,
+                    borderWidth: 2
+                }]
+            },
+        options: {
+            responsive: true,
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        parser: 'MM/DD/YYYY HH:mm:ss',
+                        tooltipFormat: 'll HH:mm'
+                    },
+                    scaleLabel: {
+                        display: true
+                    },
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        display: true
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }]
+            }
+        }
+        });
+</script>
+</body>
+</html>
