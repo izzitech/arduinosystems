@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace ArduinoSystem.Data
 {
-    public class ArduinoSystemContext : IdentityDbContext
+    public class ArduinoSystemContext : IdentityDbContext<ApplicationUser>
     {
-        public ArduinoSystemContext(DbContextOptions options) : base(options)
+        public ArduinoSystemContext(DbContextOptions<ArduinoSystemContext> options) 
+            : base(options)
         {
         }
 
         public DbSet<Channel> Channels { get; set; }
-        public DbSet<Account> Accounts { get; set; }
         public DbSet<Entry> Entries { get; set; }
     }
 }

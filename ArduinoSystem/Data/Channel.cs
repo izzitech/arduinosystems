@@ -16,9 +16,9 @@ namespace ArduinoSystem.Data
         [StringLength(140, MinimumLength = 2)]
         public string Name { get; set; }
 
-        [ForeignKey("Acount")]
-        public Guid AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         [StringLength(140)]
         [Display(Name="Field1")]

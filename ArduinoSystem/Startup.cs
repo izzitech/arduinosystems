@@ -35,8 +35,9 @@ namespace ArduinoSystem
                 }
             );
 
-            services.AddDefaultIdentity<IdentityUser>(o => { })
-                .AddEntityFrameworkStores<ArduinoSystemContext>();
+            services.AddDefaultIdentity<ApplicationUser>(o => { })
+                .AddEntityFrameworkStores<ArduinoSystemContext>()
+                .AddDefaultUI();
             
             services.AddControllersWithViews();
         }

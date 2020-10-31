@@ -19,20 +19,20 @@ namespace ArduinoSystem.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index([Bind(Prefix = "accountid")]Guid accountId)
+        public async Task<IActionResult> Index([Bind(Prefix = "userId")]string userId)
         {
-            Account account = await _context.Accounts.FindAsync(accountId);
+            var user = await _context.Users.FindAsync(userId);
 
-            if (account == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            ViewBag.Account = account;
+            ViewBag.User = user;
             var arduinoSystemContext =
                 _context.Channels
-                .Include(c => c.Account)
-                .Where(c => c.AccountId == accountId);
+                .Include(c => c.User)
+                .Where(c => c.UserId == userId);
 
             return View(await arduinoSystemContext.ToListAsync());
         }
@@ -61,7 +61,7 @@ namespace ArduinoSystem.Controllers
 
         public IActionResult Create([Bind(Prefix = "accountid")]Guid accountId)
         {
-            Account account = _context.Accounts.Find(accountId);
+            var account = _context.Users.Find(accountId);
             ViewData["Account"] = account;
             return View();
         }
@@ -71,15 +71,15 @@ namespace ArduinoSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,AccountId,Field1_Name,Field2_Name,Field3_Name,Field4_Name,Field5_Name,Field6_Name,Field7_Name,Field8_Name")] Channel channel)
+        public async Task<IActionResult> Create([Bind("Id,Name,UserId,Field1_Name,Field2_Name,Field3_Name,Field4_Name,Field5_Name,Field6_Name,Field7_Name,Field8_Name")] Channel channel)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(channel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { accountid = channel.AccountId });
+                return RedirectToAction(nameof(Index), new { accountid = channel.UserId });
             }
-            Account account = await _context.Accounts.FindAsync(channel.AccountId);
+            var account = await _context.Users.FindAsync(channel.UserId);
             ViewData["Account"] = account;
             return View(channel);
         }
@@ -130,7 +130,7 @@ namespace ArduinoSystem.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index), new { accountid = channel.AccountId });
+                return RedirectToAction(nameof(Index), new { accountid = channel.UserId });
             }
 
             return View(channel);
@@ -145,7 +145,7 @@ namespace ArduinoSystem.Controllers
             }
 
             var channel = await _context.Channels
-                .Include(c => c.Account)
+                .Include(c => c.UserId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (channel == null)
             {
@@ -163,7 +163,7 @@ namespace ArduinoSystem.Controllers
             var channel = await _context.Channels.FindAsync(id);
             _context.Channels.Remove(channel);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { accountid = channel.AccountId });
+            return RedirectToAction(nameof(Index), new { accountid = channel.UserId });
         }
 
         private bool ChannelExists(Guid id)

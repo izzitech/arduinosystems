@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201030234839_ChangesToIdentity.cs" />
+    <Compile Remove="Migrations\20201030234839_ChangesToIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20201031000158_ChangesToIdentity.cs" />
+    <Compile Remove="Migrations\20201031000158_ChangesToIdentity.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />

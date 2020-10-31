@@ -3,21 +3,38 @@ using System;
 using ArduinoSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ArduinoSystem.Migrations
 {
     [DbContext(typeof(ArduinoSystemContext))]
-    partial class ArduinoSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20201031001644_IdentityUser2")]
+    partial class IdentityUser2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            modelBuilder.Entity("ArduinoSystem.Data.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("character varying(140)")
+                        .HasMaxLength(140);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
 
             modelBuilder.Entity("ArduinoSystem.Data.ApplicationUser", b =>
                 {
@@ -46,8 +63,8 @@ namespace ArduinoSystem.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(140)")
-                        .HasMaxLength(140);
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("character varying(256)")
@@ -94,6 +111,9 @@ namespace ArduinoSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Field1_Name")
                         .HasColumnType("character varying(140)")
                         .HasMaxLength(140);
@@ -131,12 +151,9 @@ namespace ArduinoSystem.Migrations
                         .HasColumnType("character varying(140)")
                         .HasMaxLength(140);
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Channels");
                 });
@@ -333,9 +350,11 @@ namespace ArduinoSystem.Migrations
 
             modelBuilder.Entity("ArduinoSystem.Data.Channel", b =>
                 {
-                    b.HasOne("ArduinoSystem.Data.ApplicationUser", "User")
+                    b.HasOne("ArduinoSystem.Data.Account", "Account")
                         .WithMany("Channels")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ArduinoSystem.Data.Entry", b =>
