@@ -1,15 +1,10 @@
 ﻿@model IEnumerable<ArduinoSystem.Data.Channel>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
 <h1>Index</h1>
-<h4>@ViewBag.Account.Name</h4>
-<p>
-    <a asp-action="Create" asp-route-accountid="@ViewBag.Account.Id">Create New</a>
-</p>
 <br />
+<a asp-action="Create" asp-controller="Channels">Crear nuevo canal</a>
 <table class="table">
     <thead>
         <tr>
@@ -23,67 +18,63 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th></th>
-        </tr>   
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    <dl class="row">
-                        @if (!string.IsNullOrEmpty(item.Field1_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field1_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field1_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field2_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field2_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field2_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field3_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field3_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field3_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field4_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field4_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field4_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field5_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field5_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field5_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field6_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field6_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field6_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field7_Name))
-                        {
-                            <dt class="col-auto">@Html.DisplayNameFor(model => model.Field7_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field7_Name)</dd>
-                        }
-                        @if (!string.IsNullOrEmpty(item.Field8_Name))
-                        {
-                            <dt class="col-2">@Html.DisplayNameFor(model => model.Field8_Name)</dt>
-                            <dd class="col-10">@Html.DisplayFor(modelItem => item.Field8_Name)</dd>
-                        }
-                    </dl>
-                </td>
-                <td>
-                    <code>@Html.DisplayFor(modelItem => item.Id)</code>
-                </td>
-                <td class="text-right">
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
+<tr>
+    <td>
+
+        @Html.DisplayFor(modelItem => item.Name)
+
+    </td>
+    <td>
+        <dl class="row">
+            @if (!string.IsNullOrEmpty(item.Field1_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field1_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field1_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="1">Ver</a></dd>
+                                        
+}
+            @if (!string.IsNullOrEmpty(item.Field2_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field2_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field2_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="2">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field3_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field3_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field3_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="3">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field4_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field4_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field4_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="4">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field5_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field5_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field5_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="4">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field6_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field6_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field6_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="5">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field7_Name))
+            {
+<dt class="col-auto">@Html.DisplayNameFor(model => model.Field7_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field7_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="6">Ver</a></dd>}
+            @if (!string.IsNullOrEmpty(item.Field8_Name))
+            {
+<dt class="col-2">@Html.DisplayNameFor(model => model.Field8_Name)</dt>
+                    <dd class="col-10">@Html.DisplayFor(modelItem => item.Field8_Name) <a asp-action="View" asp-route-apikey="@item.Id" asp-route-field="7">Ver</a></dd>}
+        </dl>
+    </td>
+    <td>
+        <code>@Html.DisplayFor(modelItem => item.Id)</code>
+    </td>
+    <td class="text-right">
+        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    </td>
+</tr>
+}
     </tbody>
 </table>

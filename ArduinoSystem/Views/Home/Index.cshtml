@@ -1,7 +1,19 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model HomeViewModel
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome to ArduinoSystem</h1>
-    </div> 
+@{ ViewData["Title"] = "Home"; }
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to ArduinoSystem</h1>
+    
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a asp-controller="channels">Ver canales</a>
+        </li>
+        @foreach (var user in Model.users)
+        {
+    <li class="list-group-item">
+        <a asp-controller="channels" asp-route-userId="@user.Id">Arduinos de @user.Name</a>
+    </li>}
+    </ul>
+</div>

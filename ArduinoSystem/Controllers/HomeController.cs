@@ -6,21 +6,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ArduinoSystem.Models;
+using Microsoft.AspNetCore.Identity;
+using ArduinoSystem.Data;
 
 namespace ArduinoSystem.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _usrMgr;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserManager<ApplicationUser> userManager, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _usrMgr = userManager;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var model = new HomeViewModel();
+            model.users = new List<HomeUserDto>();
+            foreach(var user in _usrMgr.Users)
+            {
+                var dto = new HomeUserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                };
+                model.users.Add(dto);
+            }
+                
+            return View(model);
         }
 
         public IActionResult Privacy()

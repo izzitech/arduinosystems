@@ -35,7 +35,10 @@ namespace ArduinoSystem
                 }
             );
 
-            services.AddDefaultIdentity<ApplicationUser>(o => { })
+            services.AddDefaultIdentity<ApplicationUser>(o => {
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequireUppercase = false;
+            })
                 .AddEntityFrameworkStores<ArduinoSystemContext>()
                 .AddDefaultUI();
             
@@ -45,11 +48,13 @@ namespace ArduinoSystem
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            /*
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<ArduinoSystemContext>();
                 context.Database.Migrate();
             }
+            */
 
             if (env.IsDevelopment())
             {

@@ -7,62 +7,109 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArduinoSystem.Data;
 using ArduinoSystem.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ArduinoSystem.Controllers
 {
     public class ChannelsController : Controller
     {
         private readonly ArduinoSystemContext _context;
+        private readonly UserManager<ApplicationUser> _usrMgr;
 
-        public ChannelsController(ArduinoSystemContext context)
+
+        public ChannelsController(UserManager<ApplicationUser> userManager, ArduinoSystemContext context)
         {
             _context = context;
+            _usrMgr = userManager;
         }
 
-        public async Task<IActionResult> Index([Bind(Prefix = "userId")]string userId)
+        public async Task<IActionResult> Index(string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                return NotFound();
+                var loggedUser = _usrMgr.GetUserAsync(HttpContext.User);
+                var arduinoSystemContext =
+                    _context.Channels
+                    .Include(c => c.User)
+                    .Where(c => c.UserId == loggedUser.Result.Id);
+
+                return View(await arduinoSystemContext.ToListAsync());
             }
+            else
+            {
+                var user = await _context.Users.FindAsync(userId);
+                ViewBag.User = user;
+                var arduinoSystemContext =
+                    _context.Channels
+                    .Include(c => c.User)
+                    .Where(c => c.UserId == userId);
 
-            ViewBag.User = user;
-            var arduinoSystemContext =
-                _context.Channels
-                .Include(c => c.User)
-                .Where(c => c.UserId == userId);
-
-            return View(await arduinoSystemContext.ToListAsync());
+                return View(await arduinoSystemContext.ToListAsync());
+            }
         }
 
         [HttpGet]
-        public IActionResult View(Guid apikey, int field, int take)
+        public IActionResult View(Guid apikey, int field, int? take)
         {
             var model = new GraphicViewModel();
 
-            var values = 
+            var values =
+                
                 _context.Entries
                 .Where(x => x.ChannelId == apikey)
-                .Take(take)
-                .OrderByDescending(x => x.CreatedAt);
+                .OrderByDescending(x => x.Id)
+                .Take(take == null ? 20 : take.Value)
+                .OrderBy(x => x.Id);
 
-            var xValues = values.Select(x => x.CreatedAt.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            var yValues = values.Select(x => x.Field1.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            if (values.Count() > 0)
+            {
 
-            model.xValues = $"[\"{String.Join("\", \"", xValues)}\"]";
-            model.yValues = $"[\"{String.Join("\", \"", yValues)}\"]";
+                var xValues = values.Select(x => x.CreatedAt.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                IEnumerable<string> yValues = values.Select(x => x.Field1.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                switch (field)
+                {
+                    case 1:
+                        yValues = values.Select(x => x.Field1.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field1_Name;
+                        break;
+                    case 2:
+                        yValues = values.Select(x => x.Field2.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field2_Name;
+                        break;
+                    case 3:
+                        yValues = values.Select(x => x.Field3.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field3_Name;
+                        break;
+                    case 4:
+                        yValues = values.Select(x => x.Field4.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field4_Name;
+                        break;
+                    case 5:
+                        yValues = values.Select(x => x.Field5.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field5_Name;
+                        break;
+                    case 6:
+                        yValues = values.Select(x => x.Field6.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field6_Name;
+                        break;
+                    case 7:
+                        yValues = values.Select(x => x.Field7.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field7_Name;
+                        break;
+                    case 8:
+                        yValues = values.Select(x => x.Field8.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        model.graphName = _context.Channels.First(x => x.Id == apikey).Field8_Name;
+                        break;
+                }
 
-            model.graphName = _context.Channels.First(x => x.Id == apikey).Field1_Name;
-
+                model.xValues = $"[\"{String.Join("\", \"", xValues)}\"]";
+                model.yValues = $"[\"{String.Join("\", \"", yValues)}\"]";
+            }
             return View(model);
         }
 
-        public IActionResult Create([Bind(Prefix = "accountid")]Guid accountId)
+        public IActionResult Create()
         {
-            var account = _context.Users.Find(accountId);
-            ViewData["Account"] = account;
             return View();
         }
 
@@ -71,16 +118,17 @@ namespace ArduinoSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,UserId,Field1_Name,Field2_Name,Field3_Name,Field4_Name,Field5_Name,Field6_Name,Field7_Name,Field8_Name")] Channel channel)
+        public async Task<IActionResult> Create([Bind("Name,Field1_Name,Field2_Name,Field3_Name,Field4_Name,Field5_Name,Field6_Name,Field7_Name,Field8_Name")] Channel channel)
         {
+            var user = _usrMgr.GetUserAsync(User).Result;
             if (ModelState.IsValid)
             {
+                channel.UserId = user.Id;
                 _context.Add(channel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { accountid = channel.UserId });
+                return RedirectToAction(nameof(Index));
             }
-            var account = await _context.Users.FindAsync(channel.UserId);
-            ViewData["Account"] = account;
+
             return View(channel);
         }
 
